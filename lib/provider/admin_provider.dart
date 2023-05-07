@@ -53,16 +53,16 @@ class AdminProvider extends ChangeNotifier {
 
   getAllDonorByBloodCategory(BloodCategoryModel bloodCategoryModel) {
     DbHelper.getAllDonorByBloodCategory(bloodCategoryModel).listen((snapshot) {
-      BloodCategoryList = List.generate(snapshot.docs.length,
-              (index) =>BloodCategoryModel.fromMap(snapshot.docs[index].data()));
+      DonorList = List.generate(snapshot.docs.length,
+              (index) =>DonarModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
 
   getAllDonorByAreaCategory(AreaCategoryModel areaCategoryModel) {
     DbHelper.getAllDonorByAreaCategory(areaCategoryModel).listen((snapshot) {
-      BloodCategoryList = List.generate(snapshot.docs.length,
-              (index) =>BloodCategoryModel.fromMap(snapshot.docs[index].data()));
+      DonorList = List.generate(snapshot.docs.length,
+              (index) =>DonarModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
