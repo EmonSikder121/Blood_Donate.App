@@ -33,9 +33,9 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllDonorByBloodCategory(
       BloodCategoryModel bloodCategoryModel) =>
       _db
-          .collection(areaCategory)
-          .where(bloodcategoryFieldName,
-          isEqualTo: bloodCategoryModel.bloodcategoryId)
+          .collection(donarCollection)
+          .where('$donorFieldarealist.$areacategoryFieldName',
+          isEqualTo: bloodCategoryModel.bloodcategoryName)
           // .where(productFieldAvailable, isEqualTo: true)
           .snapshots();
 
@@ -43,9 +43,9 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllDonorByAreaCategory(
       AreaCategoryModel areaCategoryModel) =>
       _db
-          .collection(areaCategory)
-          .where(areacategoryFieldName,
-          isEqualTo: areaCategoryModel.areacategoryId)
+          .collection(donarCollection)
+          .where('$donorFieldarealist.$areacategoryFieldName',
+          isEqualTo: areaCategoryModel.areacategoryName)
       // .where(productFieldAvailable, isEqualTo: true)
           .snapshots();
 
@@ -55,5 +55,17 @@ class DbHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllBloodCategories() =>
       _db.collection(bloodCategory).snapshots();
+
+
+  static Future<void> addUser(DonarModel donarModel) {
+    return _db
+        .collection(donarCollection)
+        .doc(donarModel.donorId)
+        .set(donarModel.toMap());
+  }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInfo(
+      String uid) =>
+      _db.collection(donarCollection).doc(uid).snapshots();
 
 }

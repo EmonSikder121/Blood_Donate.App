@@ -1,6 +1,6 @@
 import 'package:blood_donate_app/admin/model/area_catagory_model.dart';
 import 'package:blood_donate_app/admin/model/blood_catagory_model.dart';
-import 'package:blood_donate_app/user/pages/donor_registration.dart';
+import 'package:blood_donate_app/admin/pages/developer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../admin/pages/launcharpage.dart';
@@ -85,7 +85,9 @@ class _ViewDonorListState extends State<ViewDonorList> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: InkWell(
-                        onTap: (){},
+                        onTap: (){
+                          Navigator.pushNamed(context, Developer.routeName);
+                        },
                         child: Row(
                           children: const [
                             Icon(Icons.warning_amber,size: 25,color: Colors.blue,),
@@ -116,7 +118,7 @@ class _ViewDonorListState extends State<ViewDonorList> {
                           Navigator.pushNamed(context, DonarLauncherPage.routeName);
                         },
                         child: const Text(
-                          'Register',
+                          'Donor',
                           style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.bold),
                         )),
                   ),

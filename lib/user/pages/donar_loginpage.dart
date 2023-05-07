@@ -1,26 +1,33 @@
-import 'package:blood_donate_app/user/pages/donor_registration.dart';
+import 'package:blood_donate_app/user/pages/donor_profile.dart';
+import 'package:blood_donate_app/user/pages/donor_registration%20page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
+import '../../provider/donar_provider.dart';
+import '../user_auth/user_auth_service.dart';
 
 
+class DonorLoginPage extends StatefulWidget {
+  static const String routeName = '/donorlogin';
 
-class DonarLoginPage extends StatefulWidget {
-  static const String routeName = '/Donarlogin';
-  const DonarLoginPage({Key? key}) : super(key: key);
+  const DonorLoginPage({Key? key}) : super(key: key);
 
   @override
-  State<DonarLoginPage> createState() => _DonarLoginPageState();
+  State<DonorLoginPage> createState() => _LoginPageState();
 }
 
-class _DonarLoginPageState extends State<DonarLoginPage> {
+class _LoginPageState extends State<DonorLoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String _errMsg = '';
+  late UserProvider userProvider;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    super.didChangeDependencies();
   }
 
   @override
@@ -54,7 +61,7 @@ class _DonarLoginPageState extends State<DonarLoginPage> {
                 padding: const EdgeInsets.all(4.0),
                 child: TextFormField(
                   controller: _passwordController,
-                  obscureText: true,
+                  //obscureText: true,
                   decoration: const InputDecoration(
                       filled: true,
                       prefixIcon: Icon(Icons.lock),
@@ -67,25 +74,59 @@ class _DonarLoginPageState extends State<DonarLoginPage> {
                   },
                 ),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  _authenticate();
+                },
+                child: const Text('Login'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, RegistrationPage.routeName);
+                },
+                child: const Text('Register'),
+              ),
+              Row(
+                children: [
+                  const Text('New User?'),
+                  // TextButton(
+                  //   onPressed: () {
+                  //     _authenticate(false);
+                  //   },
+                  //   child: const Text('Register'),
+                  // ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, RegistrationPage.routeName);
+                    },
+                    child: const Text('Register'),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   const Text(
-                    'Forgot password?',
+                    'Forgot password',
                     style: TextStyle(fontSize: 18, color: Colors.red),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     child: const Text('Click Here'),
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Login as Donar'),
+              const Center(child: Text('OR', style: TextStyle(fontSize: 20),),),
+              TextButton.icon(
+                icon: const Icon(
+                  Icons.g_mobiledata,
+                  size: 30,
+                ),
+                onPressed: _signInWithGoogle,
+                label: const Text('Sign In with Google'),
               ),
-              ElevatedButton(onPressed: () {
-                Navigator.pushNamed(context, DonarRegister.routeName);
-              }, child: const Text('Register as Donor')),
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -106,29 +147,34 @@ class _DonarLoginPageState extends State<DonarLoginPage> {
     _passwordController.dispose();
     super.dispose();
   }
-  //
-  // void _authenticate() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     EasyLoading.show(status: 'Please wait', dismissOnTap: false);
-  //     final email = _emailController.text;
-  //     final password = _passwordController.text;
-  //     try {
-  //       final status = await AuthService.loginAdmin(email, password);
-  //       EasyLoading.dismiss();
-  //       if (status) {
-  //         Navigator.pushReplacementNamed(context, LauncherPage.routeName);
-  //       } else {
-  //         await AuthService.logout();
-  //         setState(() {
-  //           _errMsg = 'You are not an Admin. Please login with a Admin account';
-  //         });
-  //       }
-  //     } on FirebaseAuthException catch (error) {
-  //       EasyLoading.dismiss();
-  //       setState(() {
-  //         _errMsg = error.message!;
-  //       });
-  //     }
-  //   }
-  // }
+
+  void _authenticate() async {
+    if (_formKey.currentState!.validate()) {
+      EasyLoading.show(status: 'Please wait', dismissOnTap: false);
+      final email = _emailController.text;
+      final password = _passwordController.text;
+      UserCredential userCredential;
+      try {
+        userCredential = await AuthService.login(email, password);
+
+        EasyLoading.dismiss();
+        Navigator.pushReplacementNamed(context, Profile.routeName);
+
+      } on FirebaseAuthException catch (error) {
+        EasyLoading.dismiss();
+        setState(() {
+          _errMsg = error.message!;
+        });
+      }
+    }
+  }
+
+  void _signInWithGoogle() async {
+
+  }
+
+  void _loginAsGuest() {
+
+  }
+
 }
