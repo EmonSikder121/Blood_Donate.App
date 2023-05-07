@@ -19,7 +19,7 @@ const List<DashboardModel> dashboardModelList = [
   DashboardModel(
       title: 'Add Blood Group',
       iconData: Icons.add,
-      routeName: BloodCategoryPage.routeName,
+      routeName: BloodcategoryPage.routeName,
   ),
   DashboardModel(
       title: 'Add Area',

@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         LauncherPage.routeName:(_) =>const LauncherPage(),
         LoginPage.routeName: (_) => const LoginPage(),
         DashboardPage.routeName: (_) => const DashboardPage(),
-        BloodCategoryPage.routeName: (_) => const BloodCategoryPage(),
+        BloodcategoryPage.routeName: (_) => const BloodcategoryPage(),
         AreacategoryPage.routeName: (_) => const AreacategoryPage(),
       }
     );

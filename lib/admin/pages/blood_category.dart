@@ -5,16 +5,15 @@ import '../../provider/admin_provider.dart';
 import '../utils/widget_function.dart';
 
 
-
-class BloodCategoryPage extends StatelessWidget {
+class BloodcategoryPage extends StatelessWidget {
   static const String routeName = '/bloodcategoryPage';
-  const BloodCategoryPage({Key? key}) : super(key: key);
+  const BloodcategoryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blood Category'),
+        title: const Text('Area category'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -22,9 +21,9 @@ class BloodCategoryPage extends StatelessWidget {
               context: context,
               title: 'Category',
               positiveButtonText: 'ADD',
-              onSubmit: (_value) {
+              onSubmit: (value) {
                 Provider.of<AdminProvider>(context, listen: false)
-                    .addNewbloodCategory(_value);
+                    .addNewbloodCategory(value);
               });
         },
         child: const Icon(Icons.add),
