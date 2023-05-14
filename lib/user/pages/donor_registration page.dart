@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:blood_donate_app/admin/model/area_catagory_model.dart';
 import 'package:blood_donate_app/admin/model/blood_catagory_model.dart';
+import 'package:blood_donate_app/user/pages/donar_launcharpage.dart';
 import 'package:blood_donate_app/user/pages/donor_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -234,9 +235,9 @@ class _LoginPageState extends State<RegistrationPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _authenticate();
+                  _authenticate(false);
                 },
-                child: const Text('Login'),
+                child: const Text('Register'),
               ),
               const Center(child: Text('OR', style: TextStyle(fontSize: 20),),),
               TextButton.icon(
@@ -284,30 +285,38 @@ class _LoginPageState extends State<RegistrationPage> {
     super.dispose();
   }
 
-  void _authenticate() async {
+  void _authenticate(bool tag) async {
     if (_formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Please wait', dismissOnTap: false);
-      String? downloadUrl;
       final email = _emailController.text;
       final password = _passwordController.text;
       UserCredential userCredential;
+
+
       try {
-        userCredential = await AuthService.register(email, password);
-          downloadUrl = await _userProvider.uploadImage(thumbnailImageLocalPath!);
-          final userModel = DonarModel(
+        if(tag) {
+          userCredential = await AuthService.login(email, password);
+        } else {
+          userCredential = await AuthService.register(email, password);
+        }
+
+        if(!tag) {
+
+          final donorModel = DonarModel(
             donorId: userCredential.user!.uid,
             email: userCredential.user!.email!,
-            donorName:_namedController.text,
-            number: _namedController.hashCode,
-            bloodGroup: _bloodController.text,
-            thumbnailImageUrl: downloadUrl,
+            donorName: _namedController.text,
             areaCategory: areaCategoryModel!,
-            bloodCategory: bloodCategoryModel!
-          );
-          await userProvider.addUser(userModel);
+            bloodCategory: bloodCategoryModel!,
+            bloodGroup: _bloodController.text,
+            thumbnailImageUrl: '',
+            number: _numberController.hashCode,
 
+          );
+          await userProvider.addUser(donorModel);
+        }
         EasyLoading.dismiss();
-        Navigator.pushReplacementNamed(context, Profile.routeName);
+        Navigator.pushReplacementNamed(context, DonarLauncherPage.routeName);
 
       } on FirebaseAuthException catch (error) {
         EasyLoading.dismiss();
@@ -317,10 +326,11 @@ class _LoginPageState extends State<RegistrationPage> {
       }
     }
   }
+  }
 
   void _signInWithGoogle() async {
 
   }
 
 
-}
+

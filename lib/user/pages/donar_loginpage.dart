@@ -1,12 +1,16 @@
-import 'package:blood_donate_app/user/pages/donor_profile.dart';
 import 'package:blood_donate_app/user/pages/donor_registration%20page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import '../../provider/donar_provider.dart';
+
+import '../models/user_model.dart';
+
 import '../user_auth/user_auth_service.dart';
 
+import 'donar_launcharpage.dart';
 
 class DonorLoginPage extends StatefulWidget {
   static const String routeName = '/donorlogin';
@@ -76,28 +80,16 @@ class _LoginPageState extends State<DonorLoginPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _authenticate();
+                  _authenticate(true);
                 },
                 child: const Text('Login'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, RegistrationPage.routeName);
-                },
-                child: const Text('Register'),
               ),
               Row(
                 children: [
                   const Text('New User?'),
-                  // TextButton(
-                  //   onPressed: () {
-                  //     _authenticate(false);
-                  //   },
-                  //   child: const Text('Register'),
-                  // ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, RegistrationPage.routeName);
+                      Navigator.pushNamed(context, RegistrationPage.routeName);
                     },
                     child: const Text('Register'),
                   ),
@@ -148,17 +140,21 @@ class _LoginPageState extends State<DonorLoginPage> {
     super.dispose();
   }
 
-  void _authenticate() async {
+  void _authenticate(bool tag) async {
     if (_formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Please wait', dismissOnTap: false);
       final email = _emailController.text;
       final password = _passwordController.text;
       UserCredential userCredential;
       try {
-        userCredential = await AuthService.login(email, password);
+        if(tag) {
+          userCredential = await AuthService.login(email, password);
+        } else {
+          userCredential = await AuthService.register(email, password);
+        }
 
         EasyLoading.dismiss();
-        Navigator.pushReplacementNamed(context, Profile.routeName);
+        Navigator.pushReplacementNamed(context, DonarLauncherPage.routeName);
 
       } on FirebaseAuthException catch (error) {
         EasyLoading.dismiss();

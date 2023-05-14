@@ -14,6 +14,7 @@ class UserProvider extends ChangeNotifier {
     return DbHelper.addUser(donarModel);
   }
 
+
   getUserInfo() {
     DbHelper.getUserInfo(AuthService.currentUser!.uid).listen((snapshot) {
       if (snapshot.exists) {
