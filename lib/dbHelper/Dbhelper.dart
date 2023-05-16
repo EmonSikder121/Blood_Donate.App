@@ -34,7 +34,7 @@ class DbHelper {
       BloodCategoryModel bloodCategoryModel) =>
       _db
           .collection(donarCollection)
-          .where('$donorFieldarealist.$areacategoryFieldName',
+          .where('$donorFieldarealist.$bloodcategoryFieldName',
           isEqualTo: bloodCategoryModel.bloodcategoryName)
           // .where(productFieldAvailable, isEqualTo: true)
           .snapshots();
@@ -67,5 +67,8 @@ class DbHelper {
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInfo(
       String uid) =>
       _db.collection(donarCollection).doc(uid).snapshots();
+
+
+
 
 }

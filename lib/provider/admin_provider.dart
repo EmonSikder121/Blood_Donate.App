@@ -77,18 +77,11 @@ class AdminProvider extends ChangeNotifier {
   }
 
 
-  Future<String> uploadImage(String thumbnailImageLocalPath) async {
-    final photoRef = FirebaseStorage.instance
-        .ref()
-        .child('DonorImage/${DateTime.now().millisecondsSinceEpoch}');
-    final uploadTask = photoRef.putFile(File(thumbnailImageLocalPath));
-    final snapshot = await uploadTask.whenComplete(() => null);
-    return snapshot.ref.getDownloadURL();
-  }
 
-  Future<void> addUser(DonarModel donarModel) {
-    return DbHelper.addUser(donarModel);
-  }
+
+
+
+
 
 }
 

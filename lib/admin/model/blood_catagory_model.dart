@@ -1,5 +1,4 @@
 const String bloodCategory = 'Blood List';
-
 const String bloodcategoryFieldId = 'bloodcategoryId';
 const String bloodcategoryFieldName = 'bloodcategoryName';
 

@@ -7,8 +7,13 @@ import '../admin/admin_auth/admin_auth.dart';
 import '../dbHelper/Dbhelper.dart';
 
 
+
+
+
 class UserProvider extends ChangeNotifier {
   DonarModel? donarModel;
+
+
 
   Future<void> addUser(DonarModel donarModel) {
     return DbHelper.addUser(donarModel);
@@ -27,11 +32,14 @@ class UserProvider extends ChangeNotifier {
   Future<String> uploadImage(String thumbnailImageLocalPath) async {
     final photoRef = FirebaseStorage.instance
         .ref()
-        .child('ProductImages/${DateTime.now().millisecondsSinceEpoch}');
+        .child('DonorImage/${DateTime.now().millisecondsSinceEpoch}');
     final uploadTask = photoRef.putFile(File(thumbnailImageLocalPath));
     final snapshot = await uploadTask.whenComplete(() => null);
     return snapshot.ref.getDownloadURL();
   }
+
+
+
 
   // Future<void> updateUserProfileField(String field, dynamic value) =>
   //     DbHelper.updateUserProfileField(

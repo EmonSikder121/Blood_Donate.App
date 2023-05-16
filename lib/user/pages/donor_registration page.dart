@@ -22,6 +22,10 @@ class RegistrationPage extends StatefulWidget {
 
   const RegistrationPage({Key? key}) : super(key: key);
 
+
+
+
+
   @override
   State<RegistrationPage> createState() => _LoginPageState();
 }
@@ -29,6 +33,8 @@ class RegistrationPage extends StatefulWidget {
 class _LoginPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   late UserProvider _userProvider;
+  late AdminProvider _adminProvider;
+  late DonarModel donarModel;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _namedController = TextEditingController();
@@ -43,6 +49,7 @@ class _LoginPageState extends State<RegistrationPage> {
   @override
   void didChangeDependencies() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    _userProvider = UserProvider();
     super.didChangeDependencies();
   }
 
@@ -291,15 +298,16 @@ class _LoginPageState extends State<RegistrationPage> {
       final email = _emailController.text;
       final password = _passwordController.text;
       UserCredential userCredential;
-
-
+      String? downloadUrl;
       try {
+
         if(tag) {
           userCredential = await AuthService.login(email, password);
         } else {
           userCredential = await AuthService.register(email, password);
         }
 
+        downloadUrl = await _userProvider.uploadImage(thumbnailImageLocalPath!);
         if(!tag) {
 
           final donorModel = DonarModel(
@@ -309,7 +317,7 @@ class _LoginPageState extends State<RegistrationPage> {
             areaCategory: areaCategoryModel!,
             bloodCategory: bloodCategoryModel!,
             bloodGroup: _bloodController.text,
-            thumbnailImageUrl: '',
+            thumbnailImageUrl: downloadUrl,
             number: _numberController.hashCode,
 
           );
